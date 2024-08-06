@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,7 @@ public class Member {
     private List<Answer> answers;
 
     @Builder
-    public Member (Long id, String nickname) {
-        this.id = id;
+    public Member(String nickname) {
         this.nickname = nickname;
     }
 
