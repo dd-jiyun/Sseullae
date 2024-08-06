@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,5 +36,13 @@ public class Answer extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Answer(String content1, String content2, String content3, Member member) {
+        this.content1 = content1;
+        this.content2 = content2;
+        this.content3 = content3;
+        this.member = member;
+    }
 
 }
