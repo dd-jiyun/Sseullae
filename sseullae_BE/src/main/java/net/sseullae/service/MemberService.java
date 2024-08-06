@@ -18,11 +18,11 @@ public class MemberService {
     }
 
     @Transactional
-    public void join(RequestMember requestMember) {
+    public Member join(RequestMember requestMember) {
         if (isDuplicateNickname(requestMember.nickname())) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
-        memberRepository.save(Member.builder()
+        return memberRepository.save(Member.builder()
                 .nickname(requestMember.nickname())
                 .build()
         );
