@@ -25,8 +25,8 @@ public class AnswerService {
     }
 
     @Transactional
-    public void save(RequestAnswer requestAnswer, Long id) {
-        Member member = findMember(id);
+    public void save(RequestAnswer requestAnswer) {
+        Member member = findMember(requestAnswer.memberId());
 
         answerRepository.save(Answer.builder()
                 .content1(requestAnswer.content1())
@@ -37,14 +37,19 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseAnswer get(LocalDateTime localDateTime) {
-        Answer answer = answerRepository.findByCreatedDate(localDateTime)
+    public ResponseAnswer getAnswers(Long id) {
+        LocalDateTime startDate = LocalDateTime.now().toLocalDate().atStartOfDay();
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay();
+
+        Answer answer = answerRepository.findByMemberIdAndCreatedDateBetween(id, startDate, endDate)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 날짜에 답변이 없습니다."));
 
         return ResponseAnswer.builder()
+                .memberId(answer.getMember().getId())
                 .content1(answer.getContent1())
                 .content2(answer.getContent2())
                 .content3(answer.getContent3())
+                .date(String.valueOf(answer.getCreatedDate().toLocalDate()))
                 .build();
     }
 

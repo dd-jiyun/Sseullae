@@ -40,10 +40,10 @@ class AnswerServiceTest {
     @DisplayName("입력한 답변 저장이 저장됩니다.")
     void saveTest() {
         // given
-        RequestAnswer requestAnswer = new RequestAnswer("content1", "content2", "content3");
+        RequestAnswer requestAnswer = new RequestAnswer(1L, "content1", "content2", "content3");
 
         // when
-        answerService.save(requestAnswer, savedMember.getId());
+        answerService.save(requestAnswer);
 
         // then
         assertThat(answerRepository.findAll().size()).isEqualTo(1);
@@ -51,27 +51,25 @@ class AnswerServiceTest {
 
     @Test
     @DisplayName("해당 날짜에 입력한 답변을 조회합니다.")
-    void get() {
+    void getAnswersTest() {
         // given
-        RequestAnswer requestAnswer = new RequestAnswer("content1", "content2", "content3");
+        RequestAnswer requestAnswer = new RequestAnswer(1L,"content1", "content2", "content3");
 
         // when
-        answerService.save(requestAnswer, savedMember.getId());
+        answerService.save(requestAnswer);
 
         // then
-        assertThat(answerService.get(answerRepository.findAll().get(0).getCreatedDate()).content1()).isEqualTo("content1");
-        assertThat(answerService.get(answerRepository.findAll().get(0).getCreatedDate()).content2()).isEqualTo("content2");
-        assertThat(answerService.get(answerRepository.findAll().get(0).getCreatedDate()).content3()).isEqualTo("content3");
+        assertThat(answerService.getAnswers(1L).memberId()).isEqualTo(1L);
     }
 
     @Test
     @DisplayName("입력한 답변을 삭제합니다.")
     void delete() {
         // given
-        RequestAnswer requestAnswer = new RequestAnswer("content1", "content2", "content3");
+        RequestAnswer requestAnswer = new RequestAnswer(1L,"content1", "content2", "content3");
 
         // when
-        answerService.save(requestAnswer, savedMember.getId());
+        answerService.save(requestAnswer);
         answerService.delete(1L);
 
         // then
