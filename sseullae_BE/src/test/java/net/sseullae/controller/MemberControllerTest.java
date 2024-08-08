@@ -24,4 +24,5 @@ class MemberControllerTest {
                 .header("Location", "/api/members/1")
                 .statusCode(201);
     }
+
 }

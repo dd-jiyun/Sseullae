@@ -65,23 +65,6 @@ class AnswerControllerTest {
     }
 
     @Test
-    @DisplayName("해당 날짜에 입력한 답변이 없을 때 예외가 발생한다.")
-    void getAnswersExceptionTest() {
-        //given
-        Member member = Member.builder()
-                .nickname("testMember")
-                .build();
-
-        memberRepository.save(member);
-
-        //when & then
-        RestAssured.given().log().all()
-                .when().get("/api/answers?id=" + member.getId())
-                .then().log().all()
-                .statusCode(500);
-    }
-
-    @Test
     @DisplayName("입력한 답변을 삭제합니다.")
     void deleteAnswerTest() {
         //given

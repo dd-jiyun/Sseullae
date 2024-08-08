@@ -1,19 +1,21 @@
 package net.sseullae.service;
 
+import static net.sseullae.exception.CustomErrorCode.DUPLICATE_NICKNAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import net.sseullae.dto.RequestMember;
+import net.sseullae.exception.CustomException;
 import net.sseullae.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@Transactional
 class MemberServiceTest {
 
     @Autowired
@@ -49,8 +51,8 @@ class MemberServiceTest {
         assertThat(memberRepository.existsByNickname("test")).isTrue();
 
         assertThatThrownBy(() -> memberService.join(duplicatedRequestMember))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미 존재하는 닉네임입니다.");
+                .isInstanceOf(CustomException.class)
+                .hasMessage(DUPLICATE_NICKNAME.getMessage());
     }
 
 }

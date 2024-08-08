@@ -1,11 +1,15 @@
 package net.sseullae.service;
 
+import static net.sseullae.exception.CustomErrorCode.ANSWER_NOT_FOUND;
+import static net.sseullae.exception.CustomErrorCode.MEMBER_NOT_FOUND;
+
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestAnswer;
 import net.sseullae.dto.ResponseAnswer;
 import net.sseullae.entity.Answer;
 import net.sseullae.entity.Member;
+import net.sseullae.exception.CustomException;
 import net.sseullae.repository.AnswerRepository;
 import net.sseullae.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -21,14 +25,14 @@ public class AnswerService {
 
     private Member findMember(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없습니다."));
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     @Transactional
-    public void save(RequestAnswer requestAnswer) {
+    public Answer save(RequestAnswer requestAnswer) {
         Member member = findMember(requestAnswer.memberId());
 
-        answerRepository.save(Answer.builder()
+        return answerRepository.save(Answer.builder()
                 .content1(requestAnswer.content1())
                 .content2(requestAnswer.content2())
                 .content3(requestAnswer.content3())
@@ -42,7 +46,7 @@ public class AnswerService {
         LocalDateTime endDate = LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay();
 
         Answer answer = answerRepository.findByMemberIdAndCreatedDateBetween(id, startDate, endDate)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 날짜에 답변이 없습니다."));
+                .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
 
         return ResponseAnswer.builder()
                 .memberId(answer.getMember().getId())
@@ -56,7 +60,7 @@ public class AnswerService {
     @Transactional
     public void delete(Long id) {
         Answer answer = answerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 답변이 없습니다."));
+                .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
 
         answerRepository.delete(answer);
     }

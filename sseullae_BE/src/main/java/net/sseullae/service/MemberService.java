@@ -1,8 +1,11 @@
 package net.sseullae.service;
 
+import static net.sseullae.exception.CustomErrorCode.DUPLICATE_NICKNAME;
+
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestMember;
 import net.sseullae.entity.Member;
+import net.sseullae.exception.CustomException;
 import net.sseullae.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +23,7 @@ public class MemberService {
     @Transactional
     public Member join(RequestMember requestMember) {
         if (isDuplicateNickname(requestMember.nickname())) {
-            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+            throw new CustomException(DUPLICATE_NICKNAME);
         }
         return memberRepository.save(Member.builder()
                 .nickname(requestMember.nickname())

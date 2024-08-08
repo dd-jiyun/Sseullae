@@ -3,6 +3,7 @@ package net.sseullae.controller;
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestAnswer;
 import net.sseullae.dto.ResponseAnswer;
+import net.sseullae.entity.Answer;
 import net.sseullae.service.AnswerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,10 @@ public class AnswerController {
 
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody RequestAnswer requestAnswer) {
-        answerService.save(requestAnswer);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Answer newAnswer = answerService.save(requestAnswer);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header("Location", "/api/answers?id=" + newAnswer.getId())
+                .build();
     }
 
     @GetMapping
