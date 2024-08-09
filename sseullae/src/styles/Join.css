@@ -1,0 +1,50 @@
+.Join {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 20px;
+}
+
+.Join p {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #8f5d46;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#joinText {
+  padding: 0.3rem;
+  font-size: 1.2rem;
+  border: 3px solid #8f5d46;
+  border-radius: 30px;
+  text-align: center;
+  font-family: "Galmet", sans-serif;
+  width: 80%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.Join button {
+  padding: 0.7rem 1.5rem;
+  font-size: 1.3rem;
+  font-family: "Galmet", sans-serif;
+  color: #8f5d46;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline #8f5d46 2px;
+  }
+}

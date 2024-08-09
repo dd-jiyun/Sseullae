@@ -1,0 +1,15 @@
+.Intro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-logo {
+  transition: opacity 1s ease-in-out;
+}
+
+.Intro.fade-out .App-logo {
+  opacity: 0;
+}
