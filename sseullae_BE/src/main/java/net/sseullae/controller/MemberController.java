@@ -2,6 +2,7 @@ package net.sseullae.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestMember;
+import net.sseullae.dto.ResponseMember;
 import net.sseullae.entity.Member;
 import net.sseullae.service.MemberService;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,15 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("join")
-    public ResponseEntity<Void> join(@RequestBody RequestMember requestMember) {
+    public ResponseEntity<ResponseMember> join(@RequestBody RequestMember requestMember) {
         Member newMember = memberService.join(requestMember);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Location", "/api/members/" + newMember.getId())
-                .build();
+                .body(ResponseMember.builder()
+                        .id(newMember.getId())
+                        .nickname(newMember.getNickname())
+                        .build()
+                );
     }
 
 }

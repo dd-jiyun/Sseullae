@@ -1,7 +1,10 @@
 package net.sseullae.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.restassured.RestAssured;
 import net.sseullae.dto.RequestMember;
+import net.sseullae.dto.ResponseMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,13 +19,17 @@ class MemberControllerTest {
         RequestMember requestMember = new RequestMember("test");
 
         // when & then
-        RestAssured.given().log().all()
+        ResponseMember responseMember = RestAssured.given().log().all()
                 .contentType("application/json")
                 .body(requestMember)
                 .when().post("/api/members/join")
                 .then().log().all()
                 .header("Location", "/api/members/1")
-                .statusCode(201);
+                .statusCode(201)
+                .extract().as(ResponseMember.class);
+
+        assertThat(responseMember.id()).isEqualTo(1L);
+        assertThat(responseMember.nickname()).isEqualTo("test");
     }
 
 }
