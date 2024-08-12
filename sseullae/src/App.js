@@ -7,13 +7,12 @@ function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
 
+  // 매번 렌더링 될때마다 호출됨.
   useEffect(() => {
-    // 2초 후에 로고가 서서히 사라지기 시작
     const opacityTimer = setTimeout(() => {
       setFadeOut(true);
     }, 2000);
 
-    // 3초 후에 Intro에서 Join으로 전환
     const pageTimer = setTimeout(() => {
       setShowIntro(false);
     }, 3000);

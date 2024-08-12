@@ -24,7 +24,7 @@
   font-family: "Galmet", sans-serif;
   width: 80%;
   max-width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.7rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 
@@ -47,4 +47,10 @@
   &:hover {
     text-decoration: underline #8f5d46 2px;
   }
+}
+
+.Join .error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
