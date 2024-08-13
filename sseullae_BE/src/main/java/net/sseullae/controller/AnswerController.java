@@ -29,7 +29,7 @@ public class AnswerController {
     public ResponseEntity<Void> save(@RequestBody RequestAnswer requestAnswer) {
         Answer newAnswer = answerService.save(requestAnswer);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Location", "/api/answers?id=" + newAnswer.getId())
+                .header("Location", "/api/answers/" + newAnswer.getId())
                 .build();
     }
 
