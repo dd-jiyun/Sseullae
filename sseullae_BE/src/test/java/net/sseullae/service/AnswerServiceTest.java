@@ -1,6 +1,7 @@
 package net.sseullae.service;
 
 import static net.sseullae.exception.CustomErrorCode.ANSWER_NOT_FOUND;
+import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -99,6 +100,18 @@ class AnswerServiceTest {
         assertThatThrownBy(() -> answerService.delete(2L))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(ANSWER_NOT_FOUND.getMessage());
+    }
+
+    @Test
+    @DisplayName("입력하지 않은 답변이 있을 경우 예외를 발생시킵니다.")
+    void inputAnswerExceptionTest() {
+        // given
+        RequestAnswer requestAnswer = new RequestAnswer(savedMember.getId(), "", "content2", "content3");
+
+        // when & then
+        assertThatThrownBy(() -> answerService.save(requestAnswer))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(INPUT_VALUE_INVALID.getMessage());
     }
 
 }

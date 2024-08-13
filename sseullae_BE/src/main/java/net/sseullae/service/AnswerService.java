@@ -1,6 +1,7 @@
 package net.sseullae.service;
 
 import static net.sseullae.exception.CustomErrorCode.ANSWER_NOT_FOUND;
+import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static net.sseullae.exception.CustomErrorCode.MEMBER_NOT_FOUND;
 
 import java.time.LocalDateTime;
@@ -28,8 +29,15 @@ public class AnswerService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
+    private void validateAnswer(RequestAnswer requestAnswer) {
+        if (requestAnswer.content1().isBlank() || requestAnswer.content2().isBlank() || requestAnswer.content3().isBlank()) {
+            throw new CustomException(INPUT_VALUE_INVALID);
+        }
+    }
+
     @Transactional
     public Answer save(RequestAnswer requestAnswer) {
+        validateAnswer(requestAnswer);
         Member member = findMember(requestAnswer.memberId());
 
         return answerRepository.save(Answer.builder()
