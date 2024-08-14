@@ -1,7 +1,9 @@
 .App {
+  color: #8f5d46;
   text-align: center;
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
   background-color: #f0eee8;
+  height: 100vh;
 }

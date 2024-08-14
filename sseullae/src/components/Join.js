@@ -1,11 +1,21 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Join.css";
-import { useState } from "react";
 import apiClient from "../api/axios";
 import { Box, Button, TextField } from "gestalt";
 
 export default function Join() {
   const [inputText, setInputText] = useState("");
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const nickname = localStorage.getItem("nickname");
+
+    if (nickname) {
+      navigate("/main");
+    }
+  }, [navigate]);
 
   const handleSubmit = async () => {
     if (!inputText) {
@@ -14,12 +24,17 @@ export default function Join() {
     }
 
     try {
-      const response = await apiClient.post("/api/members/join", {
+      const response = await apiClient.post("/members/join", {
         nickname: inputText,
       });
 
       console.log("성공 : ", response.data);
       setError(null);
+
+      localStorage.setItem("memberId", response.data.id);
+      localStorage.setItem("nickname", inputText);
+
+      navigate("/main");
     } catch (error) {
       if (error.response.status === 400) {
         setError("이미 존재하는 닉네임입니다.");
