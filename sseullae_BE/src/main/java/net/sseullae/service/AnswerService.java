@@ -48,20 +48,31 @@ public class AnswerService {
                 .build());
     }
 
+    private Answer emptyAnswers(Long id) {
+        Member member = findMember(id);
+
+        return Answer.builder()
+                .content1("")
+                .content2("")
+                .content3("")
+                .member(member)
+                .build();
+    }
+
     @Transactional(readOnly = true)
     public ResponseAnswer getAnswers(Long id) {
         LocalDateTime startDate = LocalDateTime.now().toLocalDate().atStartOfDay();
         LocalDateTime endDate = LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay();
 
         Answer answer = answerRepository.findByMemberIdAndCreatedDateBetween(id, startDate, endDate)
-                .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
+                .orElseGet(() -> emptyAnswers(id));
 
         return ResponseAnswer.builder()
                 .memberId(answer.getMember().getId())
                 .content1(answer.getContent1())
                 .content2(answer.getContent2())
                 .content3(answer.getContent3())
-                .date(String.valueOf(answer.getCreatedDate().toLocalDate()))
+                .date(answer.getCreatedDate() != null ? String.valueOf(answer.getCreatedDate().toLocalDate()) : "")
                 .build();
     }
 

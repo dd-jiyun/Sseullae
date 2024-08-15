@@ -73,11 +73,17 @@ class AnswerServiceTest {
     }
 
     @Test
-    @DisplayName("해당 날짜에 입력한 답변이 없을 경우 예외를 발생시킵니다.")
-    void getAnswersExceptionTest() {
-        assertThatThrownBy(() -> answerService.getAnswers(savedMember.getId()))
-                .isInstanceOf(CustomException.class)
-                .hasMessage(ANSWER_NOT_FOUND.getMessage());
+    @DisplayName("해당 날짜에 입력한 답변이 없을 경우 빈 값을 반환한다.")
+    void getAnswersNullTest() {
+        // give & when
+        ResponseAnswer retrievedAnswer = answerService.getAnswers(savedMember.getId());
+
+        // then
+        assertThat(retrievedAnswer.memberId()).isEqualTo(savedMember.getId());
+        assertThat(retrievedAnswer.content1()).isEqualTo("");
+        assertThat(retrievedAnswer.content2()).isEqualTo("");
+        assertThat(retrievedAnswer.content3()).isEqualTo("");
+        assertThat(retrievedAnswer.date()).isEqualTo("");
     }
 
     @Test
