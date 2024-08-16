@@ -5,6 +5,7 @@ import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static net.sseullae.exception.CustomErrorCode.MEMBER_NOT_FOUND;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestAnswer;
 import net.sseullae.dto.ResponseAnswer;
@@ -24,8 +25,8 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    private Member findMember(Long id) {
-        return memberRepository.findById(id)
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
@@ -48,8 +49,8 @@ public class AnswerService {
                 .build());
     }
 
-    private Answer emptyAnswers(Long id) {
-        Member member = findMember(id);
+    private Answer emptyAnswer(Long memberId) {
+        Member member = findMember(memberId);
 
         return Answer.builder()
                 .content1("")
@@ -60,20 +61,25 @@ public class AnswerService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseAnswer getAnswers(Long id) {
-        LocalDateTime startDate = LocalDateTime.now().toLocalDate().atStartOfDay();
-        LocalDateTime endDate = LocalDateTime.now().plusDays(1).toLocalDate().atStartOfDay();
+    public List<ResponseAnswer> getAnswers(Long memberId, int month) {
+        LocalDateTime startMonth = LocalDateTime.now().withMonth(month).withDayOfMonth(1).toLocalDate().atStartOfDay();
+        LocalDateTime endMonth = startMonth.plusMonths(1).withDayOfMonth(1).minusSeconds(1);
 
-        Answer answer = answerRepository.findByMemberIdAndCreatedDateBetween(id, startDate, endDate)
-                .orElseGet(() -> emptyAnswers(id));
+        List<Answer> answers = answerRepository.findByMemberIdAndCreatedDateBetween(memberId, startMonth, endMonth);
 
-        return ResponseAnswer.builder()
-                .memberId(answer.getMember().getId())
-                .content1(answer.getContent1())
-                .content2(answer.getContent2())
-                .content3(answer.getContent3())
-                .date(answer.getCreatedDate() != null ? String.valueOf(answer.getCreatedDate().toLocalDate()) : "")
-                .build();
+        if (answers.isEmpty()) {
+            answers.add(emptyAnswer(memberId));
+        }
+
+        return answers.stream()
+                .map(answer -> ResponseAnswer.builder()
+                        .id(answer.getId())
+                        .content1(answer.getContent1())
+                        .content2(answer.getContent2())
+                        .content3(answer.getContent3())
+                        .date(answer.getCreatedDate() != null ? String.valueOf(answer.getCreatedDate().toLocalDate()) : "")
+                        .build())
+                .toList();
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package net.sseullae.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import net.sseullae.dto.RequestAnswer;
 import net.sseullae.dto.ResponseAnswer;
@@ -34,8 +35,8 @@ public class AnswerController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseAnswer> getAnswer(@RequestParam Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(answerService.getAnswers(id));
+    public ResponseEntity<List<ResponseAnswer>> getAnswer(@RequestParam Long id, @RequestParam int month) {
+        return ResponseEntity.status(HttpStatus.OK).body(answerService.getAnswers(id, month));
     }
 
     @DeleteMapping("{id}")

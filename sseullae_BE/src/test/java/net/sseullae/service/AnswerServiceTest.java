@@ -5,6 +5,7 @@ import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import net.sseullae.dto.RequestAnswer;
 import net.sseullae.dto.ResponseAnswer;
 import net.sseullae.entity.Answer;
@@ -56,34 +57,37 @@ class AnswerServiceTest {
     }
 
     @Test
-    @DisplayName("해당 날짜에 입력한 답변을 조회합니다.")
+    @DisplayName("해당 월에 해당하는 모든 답변을 조회합니다.")
     void getAnswersTest() {
         // given
         RequestAnswer requestAnswer = new RequestAnswer(savedMember.getId(), "content1", "content2", "content3");
+        RequestAnswer requestAnswer2 = new RequestAnswer(savedMember.getId(), "content4", "content5", "content6");
+
+        answerService.save(requestAnswer);
+        answerService.save(requestAnswer2);
 
         // when
-        answerService.save(requestAnswer);
+        List<ResponseAnswer> answers = answerService.getAnswers(savedMember.getId(), 8);
 
         // then
-        Answer savedAnswer = answerRepository.findAll().get(0);
-        ResponseAnswer retrievedAnswer = answerService.getAnswers(savedMember.getId());
-
-        assertThat(retrievedAnswer.memberId()).isEqualTo(savedMember.getId());
-        assertThat(retrievedAnswer.date()).isEqualTo(String.valueOf(savedAnswer.getCreatedDate().toLocalDate()));
+        assertThat(answers).hasSize(2);
     }
+
 
     @Test
     @DisplayName("해당 날짜에 입력한 답변이 없을 경우 빈 값을 반환한다.")
     void getAnswersNullTest() {
-        // give & when
-        ResponseAnswer retrievedAnswer = answerService.getAnswers(savedMember.getId());
+        // when
+        List<ResponseAnswer> answers = answerService.getAnswers(savedMember.getId(), 8);
 
         // then
-        assertThat(retrievedAnswer.memberId()).isEqualTo(savedMember.getId());
-        assertThat(retrievedAnswer.content1()).isEqualTo("");
-        assertThat(retrievedAnswer.content2()).isEqualTo("");
-        assertThat(retrievedAnswer.content3()).isEqualTo("");
-        assertThat(retrievedAnswer.date()).isEqualTo("");
+        assertThat(answers).extracting(ResponseAnswer::content1)
+                .containsExactly("");
+        assertThat(answers).extracting(ResponseAnswer::content2)
+                .containsExactly("");
+        assertThat(answers).extracting(ResponseAnswer::content3)
+                .containsExactly("");
+
     }
 
     @Test
