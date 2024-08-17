@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/axios";
 import Calendar from "react-calendar";
@@ -12,38 +12,49 @@ function Main() {
   const nickname = localStorage.getItem("nickname");
   const [value, onChange] = useState(new Date());
   const [hasWrittenDiary, setHasWrittenDiary] = useState(false);
+  const [formattedToday, setFormattedToday] = useState(
+    moment().format("YYYY년 MM월 DD일")
+  );
+  const [todayAnswer, setTodayAnswer] = useState(null);
   const navigate = useNavigate();
 
-  const checkDiary = async () => {
+  const checkDiary = useCallback(async () => {
     const memberId = localStorage.getItem("memberId");
+    const month = moment(value).format("MM");
 
     try {
-      const response = await apiClient.get(`/answers?id=${memberId}`);
+      const response = await apiClient.get(
+        `/answers?id=${memberId}&month=${month}`
+      );
       console.log("response:", response.data);
 
-      const { content1, content2, content3 } = response.data;
+      const answers = response.data;
+      const currentDay = moment(value).format("YYYY-MM-DD");
+      const formattedDay = moment(value).format("YYYY년 MM월 DD일");
 
-      if (content1 === "" && content2 === "" && content3 === "") {
-        setHasWrittenDiary(false);
-      } else {
-        setHasWrittenDiary(true);
-      }
+      setFormattedToday(formattedDay);
+      const answer = answers.find((answer) => answer.date === currentDay);
+
+      setTodayAnswer(answer);
+      setHasWrittenDiary(!!answer);
     } catch (error) {
       console.error("error:", error);
       setHasWrittenDiary(false);
     }
-  };
+  }, [value]);
 
   useEffect(() => {
     checkDiary();
-  }, []);
+  }, [value, checkDiary]);
 
   const showQuestion = () => {
     navigate("/questions");
   };
 
   const showAnswers = () => {
-    navigate("/answers");
+    navigate("/answers", {
+      state: { date: formattedToday, answers: todayAnswer },
+    });
   };
 
   return (

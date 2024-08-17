@@ -31,9 +31,8 @@
   margin-top: 1rem;
 }
 
-.question .moods img {
-  width: 100%;
-  height: 100%;
+.question .mood-button img {
+  width: 50px;
   cursor: pointer;
 }
 

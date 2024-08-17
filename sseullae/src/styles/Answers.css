@@ -1,0 +1,38 @@
+.Answers {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 20px;
+}
+
+.Answers header img {
+  width: 80px;
+  margin-bottom: 20px;
+}
+
+.Answers header p {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #8f5d46;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.Answers main {
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.Answers footer {
+  gap: 20px;
+
+  &:hover {
+    text-decoration: underline #8f5d46 2px;
+  }
+}
