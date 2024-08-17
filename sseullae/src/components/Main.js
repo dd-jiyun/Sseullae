@@ -1,19 +1,49 @@
-import React, { useState } from "react";
-import "../styles/Main.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import apiClient from "../api/axios";
 import Calendar from "react-calendar";
+import "../styles/Main.css";
 import "react-calendar/dist/Calendar.css";
 import "../styles/Calendar.css";
 import moment from "moment";
 import { Button } from "gestalt";
-import { useNavigate } from "react-router-dom";
 
 function Main() {
   const nickname = localStorage.getItem("nickname");
   const [value, onChange] = useState(new Date());
+  const [hasWrittenDiary, setHasWrittenDiary] = useState(false);
   const navigate = useNavigate();
+
+  const checkDiary = async () => {
+    const memberId = localStorage.getItem("memberId");
+
+    try {
+      const response = await apiClient.get(`/answers?id=${memberId}`);
+      console.log("response:", response.data);
+
+      const { content1, content2, content3 } = response.data;
+
+      if (content1 === "" && content2 === "" && content3 === "") {
+        setHasWrittenDiary(false);
+      } else {
+        setHasWrittenDiary(true);
+      }
+    } catch (error) {
+      console.error("error:", error);
+      setHasWrittenDiary(false);
+    }
+  };
+
+  useEffect(() => {
+    checkDiary();
+  }, []);
 
   const showQuestion = () => {
     navigate("/questions");
+  };
+
+  const showAnswers = () => {
+    navigate("/answers");
   };
 
   return (
@@ -33,12 +63,18 @@ function Main() {
         />
       </main>
       <footer>
-        <p>오늘 하루는 어땠나요?</p>
-        <Button text="쓰러갈래 !" type="submit" onClick={showQuestion}>
-          쓰러갈래 !
-        </Button>
+        {hasWrittenDiary ? (
+          <>
+            <p>이미 작성하셨네요!</p>
+            <Button text="보러갈래!" type="submit" onClick={showAnswers} />
+          </>
+        ) : (
+          <>
+            <p>오늘 하루는 어땠나요?</p>
+            <Button text="쓰러갈래!" type="submit" onClick={showQuestion} />
+          </>
+        )}
       </footer>
-      {/* 만약 오늘 이미 작성했다면, 보러갈래! 할 수 있어야함. */}
     </div>
   );
 }

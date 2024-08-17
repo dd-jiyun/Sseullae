@@ -5,6 +5,7 @@ import Intro from "./components/Intro";
 import Join from "./components/Join";
 import Main from "./components/Main";
 import Questions from "./components/Questions/Questions";
+import Answers from "./components/Answers";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);
@@ -36,6 +37,7 @@ function App() {
           <Route path="/join" element={<Join />} />
           <Route path="/main" element={<Main />} />
           <Route path="/questions" element={<Questions />} />
+          <Route path="/answers" element={<Answers />} />
         </Routes>
       </div>
     </Router>

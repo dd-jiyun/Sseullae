@@ -1,5 +1,9 @@
-import { Button } from "gestalt";
 import "../../styles/Question.css";
+import HAPPY from "../../assets/images/moods/best.png";
+import GOOD from "../../assets/images/moods/happy.png";
+import SO_SO from "../../assets/images/moods/soso.png";
+import SAD from "../../assets/images/moods/sad.png";
+import ANGRY from "../../assets/images/moods/bad.png";
 
 export default function Question1({ writeAnswers, next }) {
   const handleMood = (mood) => {
@@ -10,13 +14,22 @@ export default function Question1({ writeAnswers, next }) {
   return (
     <div className="question">
       <p>Q. 오늘의 기분은 어떤가요?</p>
-      {/* 여기에 기분 이모지 선택하는 컴포넌트 또는 버튼들이 들어갈 예정 */}
       <div className="moods">
-        <Button text="최고!" onClick={() => handleMood("최고")} />
-        <Button text="좋아!" onClick={() => handleMood("좋음")} />
-        <Button text="그럭저럭,," onClick={() => handleMood("쏘쏘")} />
-        <Button text="슬퍼ㅜ" onClick={() => handleMood("슬픔")} />
-        <Button text="화나!" onClick={() => handleMood("화남")} />
+        <button className="mood-button" onClick={() => handleMood("최고")}>
+          <img src={HAPPY} alt="최고" />
+        </button>
+        <button className="mood-button" onClick={() => handleMood("좋음")}>
+          <img src={GOOD} alt="좋음" />
+        </button>
+        <button className="mood-button" onClick={() => handleMood("쏘쏘")}>
+          <img src={SO_SO} alt="쏘쏘" />
+        </button>
+        <button className="mood-button" onClick={() => handleMood("슬픔")}>
+          <img src={SAD} alt="슬픔" />
+        </button>
+        <button className="mood-button" onClick={() => handleMood("화남")}>
+          <img src={ANGRY} alt="화남" />
+        </button>
       </div>
     </div>
   );
