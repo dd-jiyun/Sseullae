@@ -16,9 +16,13 @@ function Answers() {
 
   const handleDelete = async () => {
     try {
-      await apiClient.delete(`/answers/${answers.id}`);
-      alert("삭제되었습니다.");
-      navigate("/main");
+      if (window.confirm("정말 삭제하시겠습니까?") === true) {
+        await apiClient.delete(`/answers/${answers.id}`);
+        alert("삭제되었습니다.");
+        navigate("/main");
+      } else {
+        alert("삭제 취소");
+      }
     } catch (error) {
       console.error("error:", error);
       alert("삭제 실패");
@@ -33,8 +37,12 @@ function Answers() {
       </header>
       <main>
         <div className="q1">
-          <p>Q. 오늘의 기분은 어떤가요? </p>
-          <p>{answers?.content1 || ""}</p>
+          <p>Q. 오늘의 기분은 어떤가요?</p>
+          {answers?.content1 ? (
+            <img src={answers.content1} alt="오늘의 기분" />
+          ) : (
+            <p>기분 정보가 없습니다.</p>
+          )}
         </div>
         <div className="q2">
           <p>Q. 오늘 가장 잘한 점은?</p>

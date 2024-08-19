@@ -10,17 +10,18 @@ import { Button } from "gestalt";
 
 function Main() {
   const nickname = localStorage.getItem("nickname");
-  const [value, onChange] = useState(new Date());
+  const [value, setValue] = useState(new Date());
   const [hasWrittenDiary, setHasWrittenDiary] = useState(false);
   const [formattedToday, setFormattedToday] = useState(
     moment().format("YYYY년 MM월 DD일")
   );
   const [todayAnswer, setTodayAnswer] = useState(null);
+  const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
 
-  const checkDiary = useCallback(async () => {
+  const fetchAnswers = useCallback(async () => {
     const memberId = localStorage.getItem("memberId");
-    const month = moment(value).format("MM");
+    const month = moment().format("M");
 
     try {
       const response = await apiClient.get(
@@ -28,24 +29,27 @@ function Main() {
       );
       console.log("response:", response.data);
 
-      const answers = response.data;
-      const currentDay = moment(value).format("YYYY-MM-DD");
-      const formattedDay = moment(value).format("YYYY년 MM월 DD일");
-
-      setFormattedToday(formattedDay);
-      const answer = answers.find((answer) => answer.date === currentDay);
-
-      setTodayAnswer(answer);
-      setHasWrittenDiary(!!answer);
+      setAnswers(response.data);
     } catch (error) {
       console.error("error:", error);
-      setHasWrittenDiary(false);
     }
-  }, [value]);
+  }, []);
 
   useEffect(() => {
-    checkDiary();
-  }, [value, checkDiary]);
+    fetchAnswers();
+  }, [fetchAnswers]);
+
+  useEffect(() => {
+    document.body.style.overflow = "auto";
+    const currentDay = moment(value).format("YYYY-MM-DD");
+    const formattedDay = moment(value).format("YYYY년 MM월 DD일");
+
+    setFormattedToday(formattedDay);
+    const answer = answers.find((answer) => answer.date === currentDay);
+
+    setTodayAnswer(answer);
+    setHasWrittenDiary(!!answer);
+  }, [value, answers]);
 
   const showQuestion = () => {
     navigate("/questions");
@@ -64,13 +68,20 @@ function Main() {
       </header>
       <main>
         <Calendar
-          onChange={onChange}
+          onChange={setValue}
           next2Label={null}
           prev2Label={null}
           formatDay={(locale, date) => moment(date).format("D")}
           navigationLabel={null}
           maxDate={new Date()}
           value={value}
+          tileDisabled={({ date, view }) => {
+            if (view === "month") {
+              const formattedDate = moment(date).format("YYYY-MM-DD");
+              return !answers.some((answer) => answer.date === formattedDate);
+            }
+            return false;
+          }}
         />
       </main>
       <footer>

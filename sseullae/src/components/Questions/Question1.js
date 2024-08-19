@@ -7,7 +7,27 @@ import ANGRY from "../../assets/images/moods/bad.png";
 
 export default function Question1({ writeAnswers, next }) {
   const handleMood = (mood) => {
-    writeAnswers("question1", mood);
+    let moodImage;
+    switch (mood) {
+      case "최고":
+        moodImage = HAPPY;
+        break;
+      case "좋음":
+        moodImage = GOOD;
+        break;
+      case "쏘쏘":
+        moodImage = SO_SO;
+        break;
+      case "슬픔":
+        moodImage = SAD;
+        break;
+      case "화남":
+        moodImage = ANGRY;
+        break;
+      default:
+        moodImage = "";
+    }
+    writeAnswers("question1", moodImage);
     next();
   };
 

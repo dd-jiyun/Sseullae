@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  margin-top: 20px;
 }
 
 .Answers header img {
@@ -27,6 +26,14 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+}
+
+.Answers main p:nth-child(2) {
+  font-size: 1.3rem;
+}
+
+.Answers .q1 img {
+  width: 20%;
 }
 
 .Answers footer {
