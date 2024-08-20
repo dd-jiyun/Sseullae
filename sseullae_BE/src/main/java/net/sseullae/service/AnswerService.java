@@ -1,5 +1,6 @@
 package net.sseullae.service;
 
+import static net.sseullae.exception.CustomErrorCode.ALREADY_ANSWERED;
 import static net.sseullae.exception.CustomErrorCode.ANSWER_NOT_FOUND;
 import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static net.sseullae.exception.CustomErrorCode.MEMBER_NOT_FOUND;
@@ -30,6 +31,10 @@ public class AnswerService {
                 .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
+    private boolean isAlreadyAnswered(Long memberId, LocalDateTime start, LocalDateTime end) {
+        return answerRepository.existsByMemberIdAndCreatedDateBetween(memberId, start, end);
+    }
+
     private void validateAnswer(RequestAnswer requestAnswer) {
         if (requestAnswer.content1().isBlank() || requestAnswer.content2().isBlank() || requestAnswer.content3().isBlank()) {
             throw new CustomException(INPUT_VALUE_INVALID);
@@ -38,6 +43,11 @@ public class AnswerService {
 
     @Transactional
     public Answer save(RequestAnswer requestAnswer) {
+        if (isAlreadyAnswered(requestAnswer.memberId(), LocalDateTime.now().toLocalDate().atStartOfDay(),
+                LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1).minusSeconds(1))) {
+            throw new CustomException(ALREADY_ANSWERED);
+        }
+
         validateAnswer(requestAnswer);
         Member member = findMember(requestAnswer.memberId());
 
@@ -77,7 +87,8 @@ public class AnswerService {
                         .content1(answer.getContent1())
                         .content2(answer.getContent2())
                         .content3(answer.getContent3())
-                        .date(answer.getCreatedDate() != null ? String.valueOf(answer.getCreatedDate().toLocalDate()) : "")
+                        .date(answer.getCreatedDate() != null ? String.valueOf(answer.getCreatedDate().toLocalDate())
+                                : "")
                         .build())
                 .toList();
     }

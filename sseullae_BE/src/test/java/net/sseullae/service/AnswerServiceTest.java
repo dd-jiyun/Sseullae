@@ -1,5 +1,6 @@
 package net.sseullae.service;
 
+import static net.sseullae.exception.CustomErrorCode.ALREADY_ANSWERED;
 import static net.sseullae.exception.CustomErrorCode.ANSWER_NOT_FOUND;
 import static net.sseullae.exception.CustomErrorCode.INPUT_VALUE_INVALID;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -73,7 +74,6 @@ class AnswerServiceTest {
         assertThat(answers).hasSize(2);
     }
 
-
     @Test
     @DisplayName("해당 날짜에 입력한 답변이 없을 경우 빈 값을 반환한다.")
     void getAnswersNullTest() {
@@ -122,6 +122,22 @@ class AnswerServiceTest {
         assertThatThrownBy(() -> answerService.save(requestAnswer))
                 .isInstanceOf(CustomException.class)
                 .hasMessage(INPUT_VALUE_INVALID.getMessage());
+    }
+
+    @Test
+    @DisplayName("해당 날짜에 이미 작성한 답변이 있으면 예외를 발생시킵니다.")
+    void duplicatedAnswerExceptionTest() {
+        // given
+        RequestAnswer requestAnswer = new RequestAnswer(savedMember.getId(), "content1", "content2", "content3");
+        RequestAnswer requestAnswer2 = new RequestAnswer(savedMember.getId(), "content3", "content4", "content5");
+
+        // when
+       answerService.save(requestAnswer);
+
+        //then
+        assertThatThrownBy(() -> answerService.save(requestAnswer2))
+                .isInstanceOf(CustomException.class)
+                .hasMessage(ALREADY_ANSWERED.getMessage());
     }
 
 }
