@@ -25,7 +25,7 @@ export default function Question1({ writeAnswers, next }) {
         moodImage = ANGRY;
         break;
       default:
-        moodImage = "";
+        moodImage = null;
     }
     writeAnswers("question1", moodImage);
     next();

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextField } from "gestalt";
 import "../../styles/Question.css";
 import smLogo from "../../assets/images/Logo.png";
 
@@ -7,7 +6,7 @@ export default function Question2({ writeAnswers, prev, next, answers }) {
   const [inputText, setInputText] = useState("");
 
   useEffect(() => {
-    setInputText(answers);
+    setInputText(answers || "");
   }, [answers]);
 
   const handleNext = () => {
@@ -21,17 +20,17 @@ export default function Question2({ writeAnswers, prev, next, answers }) {
       <main>
         <img src={smLogo} alt="logo" />
 
-        <TextField
+        <input
           id="answer"
           placeholder="여기에 잘한 점을 적어주세요."
           type="text"
-          onChange={({ value }) => setInputText(value)}
+          onChange={(e) => setInputText(e.target.value)}
           value={inputText}
         />
       </main>
       <footer>
-        <Button text="이전" onClick={prev} />
-        <Button text="다음" onClick={handleNext} />
+        <button onClick={prev}>이전</button>
+        <button onClick={handleNext}>다음</button>
       </footer>
     </div>
   );

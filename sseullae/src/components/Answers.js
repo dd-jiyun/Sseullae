@@ -1,7 +1,6 @@
 import React from "react";
 import logo from "../assets/images/Logo.png";
 import "../styles/Answers.css";
-import { Button } from "gestalt";
 import { useLocation, useNavigate } from "react-router-dom";
 import apiClient from "../api/axios";
 
@@ -54,8 +53,8 @@ function Answers() {
         </div>
       </main>
       <footer>
-        <Button text="돌아가기" onClick={handleBack} />
-        <Button text="삭제" onClick={handleDelete} />
+        <button onClick={handleBack}>돌아가기</button>
+        <button onClick={handleDelete}>삭제</button>
       </footer>
     </div>
   );

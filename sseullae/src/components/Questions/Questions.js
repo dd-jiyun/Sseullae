@@ -4,6 +4,7 @@ import Question1 from "./Question1";
 import Question2 from "./Question2";
 import Question3 from "./Question3";
 import apiClient from "../../api/axios";
+import CustomModal from "../CustomModal";
 import "../../styles/Question.css";
 
 function Questions() {
@@ -13,6 +14,7 @@ function Questions() {
     question3: "",
   });
   const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,9 +27,8 @@ function Questions() {
       };
 
       try {
-        const response = await apiClient.post("/answers", data);
-        navigate("/main");
-        console.log("response:", response.config.data);
+        await apiClient.post("/answers", data);
+        setIsModalOpen(true);
       } catch (error) {
         console.error("error:", error.response.data);
         if (error.response.status === 400) {
@@ -53,8 +54,10 @@ function Questions() {
     setCurrentQuestion((prev) => (prev < 3 ? prev + 1 : 4));
   };
 
-  const finishAndGoToMain = () => {
+  const closeModalAndGoToMain = () => {
     setCurrentQuestion(4);
+    setIsModalOpen(false);
+    navigate("/main");
   };
 
   return (
@@ -78,9 +81,12 @@ function Questions() {
         <Question3
           writeAnswers={writeAnswers}
           prev={goToPreviousQuestion}
-          finish={finishAndGoToMain}
+          finish={goToNextQuestion}
           answers={answers.question3}
         />
+      )}
+      {isModalOpen && (
+        <CustomModal isOpen={isModalOpen} setOpen={closeModalAndGoToMain} />
       )}
     </div>
   );

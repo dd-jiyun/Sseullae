@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Join.css";
 import apiClient from "../api/axios";
-import { Box, Button, TextField } from "gestalt";
 
 export default function Join() {
   const [inputText, setInputText] = useState("");
@@ -48,19 +47,17 @@ export default function Join() {
   return (
     <div className="Join">
       <p>‘쓸래’에서 사용할 닉네임을 입력해주세요.</p>
-      <Box padding={8} width="100%">
-        <TextField
+      <div className="input-container">
+        <input
           id="joinText"
-          onChange={({ value }) => {
-            setInputText(value);
-          }}
+          onChange={(e) => setInputText(e.target.value)}
           placeholder="닉네임을 입력하세요"
           type="text"
           value={inputText}
         />
-      </Box>
+      </div>
       {error && <p className="error">{error}</p>}
-      <Button text="확인" type="submit" onClick={handleSubmit} />
+      <button onClick={handleSubmit}>확인</button>
     </div>
   );
 }

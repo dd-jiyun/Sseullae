@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/axios";
 import Calendar from "react-calendar";
@@ -6,8 +6,9 @@ import "../styles/Main.css";
 import "react-calendar/dist/Calendar.css";
 import "../styles/Calendar.css";
 import moment from "moment";
-import { Button } from "gestalt";
 
+// 문제점1. 요청이 두번 날라감.
+// 문제점2. 답변한 날짜가 확실하게 표시되지 않음.
 function Main() {
   const nickname = localStorage.getItem("nickname");
   const [value, setValue] = useState(new Date());
@@ -18,12 +19,18 @@ function Main() {
   const [todayAnswer, setTodayAnswer] = useState(null);
   const [answers, setAnswers] = useState([]);
   const navigate = useNavigate();
+  const isFetching = useRef(false);
 
   const fetchAnswers = useCallback(async () => {
+    if (isFetching.current) return;
+
+    isFetching.current = true;
+
     const memberId = localStorage.getItem("memberId");
     const month = moment().format("M");
 
     try {
+      console.log("API 요청 시작");
       const response = await apiClient.get(
         `/answers?id=${memberId}&month=${month}`
       );
@@ -32,6 +39,8 @@ function Main() {
       setAnswers(response.data);
     } catch (error) {
       console.error("error:", error);
+    } finally {
+      isFetching.current = false;
     }
   }, []);
 
@@ -78,7 +87,13 @@ function Main() {
           tileDisabled={({ date, view }) => {
             if (view === "month") {
               const formattedDate = moment(date).format("YYYY-MM-DD");
-              return !answers.some((answer) => answer.date === formattedDate);
+              const today = moment().format("YYYY-MM-DD");
+
+              if (formattedDate === today) {
+                return false;
+              } else {
+                return !answers.some((answer) => answer.date === formattedDate);
+              }
             }
             return false;
           }}
@@ -88,12 +103,12 @@ function Main() {
         {hasWrittenDiary ? (
           <>
             <p>이미 작성하셨네요!</p>
-            <Button text="보러갈래!" type="submit" onClick={showAnswers} />
+            <button onClick={showAnswers}>보러갈래!</button>
           </>
         ) : (
           <>
             <p>오늘 하루는 어땠나요?</p>
-            <Button text="쓰러갈래!" type="submit" onClick={showQuestion} />
+            <button onClick={showQuestion}>쓰러갈래!</button>
           </>
         )}
       </footer>
