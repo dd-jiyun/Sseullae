@@ -7,8 +7,6 @@ import "react-calendar/dist/Calendar.css";
 import "../styles/Calendar.css";
 import moment from "moment";
 
-// 문제점1. 요청이 두번 날라감.
-// 문제점2. 답변한 날짜가 확실하게 표시되지 않음.
 function Main() {
   const nickname = localStorage.getItem("nickname");
   const [value, setValue] = useState(new Date());
@@ -30,7 +28,6 @@ function Main() {
     const month = moment().format("M");
 
     try {
-      console.log("API 요청 시작");
       const response = await apiClient.get(
         `/answers?id=${memberId}&month=${month}`
       );
@@ -84,6 +81,14 @@ function Main() {
           navigationLabel={null}
           maxDate={new Date()}
           value={value}
+          tileContent={({ date, view }) =>
+            view === "month" &&
+            answers.some(
+              (answer) => answer.date === moment(date).format("YYYY-MM-DD")
+            ) ? (
+              <div className="dot"></div>
+            ) : null
+          }
           tileDisabled={({ date, view }) => {
             if (view === "month") {
               const formattedDate = moment(date).format("YYYY-MM-DD");

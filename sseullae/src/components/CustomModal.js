@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../styles/CustomModal.css";
 
-function CustomModal({ isOpen, setOpen }) {
-  const [ranmdomMessage, setRandomMessage] = useState("");
+function CustomModal({ isOpen, setOpen, fadeOut }) {
+  const [randomMessage, setRandomMessage] = useState("");
 
   useEffect(() => {
     const messages = [
@@ -13,10 +13,8 @@ function CustomModal({ isOpen, setOpen }) {
       "내일도 힘내세요!",
     ];
 
-    const randomMessage = setRandomMessage(
-      messages[Math.floor(Math.random() * messages.length)]
-    );
-    console.log(randomMessage);
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setRandomMessage(messages[randomIndex]);
 
     const timer = setTimeout(() => {
       setOpen(false);
@@ -28,12 +26,14 @@ function CustomModal({ isOpen, setOpen }) {
   }, [isOpen, setOpen]);
 
   return (
-    <div className={isOpen ? "openModal modal" : "modal"}>
-      {isOpen ? (
-        <section>
-          <p>{ranmdomMessage}</p>
-        </section>
-      ) : null}
+    <div className={`CustomModal ${fadeOut ? "fade-out" : ""}`}>
+      <div className={isOpen ? "openModal modal" : "modal"}>
+        {isOpen ? (
+          <section>
+            <p>{randomMessage}</p>
+          </section>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -11,30 +11,51 @@
   color: #644131;
   font-family: "Galmet";
 }
-.react-calendar__tile--active {
-  background-color: #8f5d46;
-  color: #f0eee8;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 20%;
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend abbr[title="토요일"] {
+  color: red;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend abbr[title="일요일"] {
+  color: red;
 }
 
 .react-calendar__tile--now {
   background-color: #ff0000 !important;
   color: #f0eee8 !important;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 20%;
+  border-radius: 30%;
+}
+
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: none;
 }
 
 .react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
-  background-color: #8f5d46b7;
+.react-calendar__tile--active:enabled:focus,
+.react-calendar__tile--active {
+  background-color: rgba(143, 93, 70, 0.6);
   color: #f0eee8;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  border-radius: 20%;
+  border-radius: 30%;
 }
 
 .react-calendar__tile:disabled,
 .react-calendar__navigation button:disabled {
   background-color: white;
   color: gray;
+}
+
+.dot {
+  height: 6px;
+  width: 6px;
+  background-color: orange;
+  border-radius: 50%;
+  margin: 2px auto 0;
 }
