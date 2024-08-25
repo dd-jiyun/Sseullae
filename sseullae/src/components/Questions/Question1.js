@@ -1,4 +1,4 @@
-import "../../styles/Question.css";
+import "./Question.css";
 import HAPPY from "../../assets/images/moods/best.png";
 import GOOD from "../../assets/images/moods/happy.png";
 import SO_SO from "../../assets/images/moods/soso.png";

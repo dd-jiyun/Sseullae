@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../api/axios";
+import apiClient from "../../api/axios";
 import Calendar from "react-calendar";
-import "../styles/Main.css";
+import "./Main.css";
 import "react-calendar/dist/Calendar.css";
-import "../styles/Calendar.css";
+import "../../styles/Calendar.css";
 import moment from "moment";
 
 function Main() {

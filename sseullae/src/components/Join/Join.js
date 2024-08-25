@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Join.css";
-import apiClient from "../api/axios";
+import "./Join.css";
+import apiClient from "../../api/axios";
 
 export default function Join() {
   const [inputText, setInputText] = useState("");

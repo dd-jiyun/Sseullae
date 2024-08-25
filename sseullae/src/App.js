@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
-import Intro from "./components/Intro";
-import Join from "./components/Join";
-import Main from "./components/Main";
+import "./styles/App.css";
+import Intro from "./components/Intro/Intro";
+import Join from "./components/Join/Join";
+import Main from "./components/Main/Main";
 import Questions from "./components/Questions/Questions";
-import Answers from "./components/Answers";
+import Answers from "./components/Answers/Answers";
 
 function App() {
   const [showIntro, setShowIntro] = useState(true);

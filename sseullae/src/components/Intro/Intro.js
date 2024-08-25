@@ -1,5 +1,5 @@
-import logo from "../assets/images/fulllogo.svg";
-import "../styles/Intro.css";
+import logo from "../../assets/images/fulllogo.svg";
+import "./Intro.css";
 
 function Intro({ fadeOut }) {
   return (

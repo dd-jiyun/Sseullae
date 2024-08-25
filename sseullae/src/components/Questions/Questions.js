@@ -4,8 +4,8 @@ import Question1 from "./Question1";
 import Question2 from "./Question2";
 import Question3 from "./Question3";
 import apiClient from "../../api/axios";
-import CustomModal from "../CustomModal";
-import "../../styles/Question.css";
+import CustomModal from "../CustomModal/CustomModal";
+import "./Question.css";
 
 function Questions() {
   const [answers, setAnswers] = useState({

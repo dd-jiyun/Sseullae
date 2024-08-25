@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../styles/Question.css";
+import "./Question.css";
 import smLogo from "../../assets/images/Logo.png";
 
 export default function Question3({ writeAnswers, prev, finish, answers }) {

@@ -1,8 +1,8 @@
 import React from "react";
-import logo from "../assets/images/Logo.png";
-import "../styles/Answers.css";
+import logo from "../../assets/images/Logo.png";
+import "./Answers.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import apiClient from "../api/axios";
+import apiClient from "../../api/axios";
 
 function Answers() {
   const location = useLocation();

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/CustomModal.css";
+import "./CustomModal.css";
 
 function CustomModal({ isOpen, setOpen, fadeOut }) {
   const [randomMessage, setRandomMessage] = useState("");
