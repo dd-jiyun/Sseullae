@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assets/images/Logo.png";
+import logo from "../../assets/images/logo.svg";
 import "./Answers.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import apiClient from "../../api/axios";

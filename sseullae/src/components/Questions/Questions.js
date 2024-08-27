@@ -30,9 +30,25 @@ function Questions() {
         await apiClient.post("/answers", data);
         setIsModalOpen(true);
       } catch (error) {
-        console.error("error:", error.response.data);
         if (error.response.status === 400) {
-          alert("답변하지 않은 질문이 있습니다.");
+          const errorMessage = error.response.data.error;
+
+          if (errorMessage === "INPUT_VALUE_INVALID") {
+            if (!answers.question1) {
+              setCurrentQuestion(1);
+            } else if (!answers.question2) {
+              setCurrentQuestion(2);
+            } else if (!answers.question3) {
+              setCurrentQuestion(3);
+            }
+            alert("답변하지 않은 질문이 있습니다.");
+          }
+          if (errorMessage === "ALREADY_ANSWERED") {
+            alert("오늘의 질문은 이미 답변하셨습니다.");
+            navigate("/main");
+          }
+        } else {
+          console.log(error.response);
         }
       }
     };

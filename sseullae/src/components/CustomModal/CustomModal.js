@@ -1,39 +1,53 @@
 import React, { useEffect, useState } from "react";
 import "./CustomModal.css";
 
-function CustomModal({ isOpen, setOpen, fadeOut }) {
+function CustomModal({ isOpen, setOpen }) {
   const [randomMessage, setRandomMessage] = useState("");
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    const messages = [
-      "오늘도 수고하셨어요!",
-      "좋은 하루 보내세요!",
-      "멋진 선택이네요!",
-      "하루를 잘 마무리했군요!",
-      "내일도 힘내세요!",
-    ];
+    let fadeOutTimer;
+    let closeTimer;
 
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    setRandomMessage(messages[randomIndex]);
+    if (isOpen) {
+      const messages = [
+        "오늘도 수고하셨어요!",
+        "좋은 하루 보내세요!",
+        "멋진 선택이네요!",
+        "하루를 잘 마무리했군요!",
+        "내일도 힘내세요!",
+      ];
 
-    const timer = setTimeout(() => {
-      setOpen(false);
-    }, 3000);
+      const randomIndex = Math.floor(Math.random() * messages.length);
+      setRandomMessage(messages[randomIndex]);
 
-    return () => {
-      clearTimeout(timer);
-    };
+      fadeOutTimer = setTimeout(() => {
+        setIsFadingOut(true);
+      }, 2000);
+
+      closeTimer = setTimeout(() => {
+        setOpen(false);
+        setIsFadingOut(false);
+      }, 3000);
+
+      return () => {
+        clearTimeout(fadeOutTimer);
+        clearTimeout(closeTimer);
+      };
+    }
   }, [isOpen, setOpen]);
 
   return (
-    <div className={`CustomModal ${fadeOut ? "fade-out" : ""}`}>
-      <div className={isOpen ? "openModal modal" : "modal"}>
-        {isOpen ? (
-          <section>
-            <p>{randomMessage}</p>
-          </section>
-        ) : null}
-      </div>
+    <div
+      className={`modalBackground ${isOpen ? "show" : ""} ${
+        isFadingOut ? "fade-out" : ""
+      }`}
+    >
+      {isOpen ? (
+        <section className="modalContent">
+          <p>{randomMessage}</p>
+        </section>
+      ) : null}
     </div>
   );
 }

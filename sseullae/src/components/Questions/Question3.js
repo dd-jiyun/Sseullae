@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Question.css";
-import smLogo from "../../assets/images/Logo.png";
+import smLogo from "../../assets/images/logo.svg";
 
 export default function Question3({ writeAnswers, prev, finish, answers }) {
   const [inputText, setInputText] = useState("");
